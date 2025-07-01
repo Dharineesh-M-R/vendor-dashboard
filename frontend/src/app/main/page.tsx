@@ -33,6 +33,19 @@ export default function MainPage() {
             </a>
           </nav>
         </aside>
+        <main className='col-span-10 bg-white p-6 space-y-6'>
+          <div className='col-span-10 text-black font-semibold text-2xl '>Dashboard Overview</div>
+          <hr />
+          <table>
+            <thead>
+              <th><div className="col-span-2 w-65 rounded-2xl shadow-lg p-4 bg-white"><div>Upcoming Bookings</div><br /><div>...</div></div>
+</th>
+<th><div className="col-span-2 w-65 rounded-2xl shadow-lg p-4 bg-white"><div>Pending Invoices</div><br /><div>...</div></div></th>
+<th><div className="col-span-2 w-65 rounded-2xl shadow-lg p-4 bg-white"><div>Drivers Active</div><br /><div>...</div></div></th>
+<th><div className="col-span-2 w-65 rounded-2xl shadow-lg p-4 bg-white"><div>Vehicles Available</div><br /><div>...</div></div></th>
+            </thead>
+          </table>
+        </main>
       </div>
     </>
   );
