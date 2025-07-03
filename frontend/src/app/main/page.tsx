@@ -43,9 +43,9 @@ export default function MainPage() {
           <div className=" w-65 rounded-2xl shadow-lg p-4 bg-white"><div>Vehicles Available</div><br /><div>...</div></div>
           </div>
           <div className='flex flex-wrap gap-5 border-2 w-max p-2 bg-gray-50 text-center rounded-lg'>
-            <h1 className='hover:bg-white p-2'>Live Bookings</h1>
-            <h1 className='hover:bg-white p-2'>Booking History</h1>
-            <h1 className='hover:bg-white p-2'>Custom Tables</h1>
+            <h1 className='hover:bg-white hover:p-1'>Live Bookings</h1>
+            <h1 className='hover:bg-white hover:p-1'>Booking History</h1>
+            <h1 className='hover:bg-white hover:p-1'>Custom Tables</h1>
           </div>
         </main>
       </div>
