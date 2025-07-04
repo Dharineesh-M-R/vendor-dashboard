@@ -2,20 +2,21 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 export default function SignupPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('staff'); // default to 'staff'
+  const [repassword, setrePassword] = useState('');
+  const [role] = useState('staff'); // default to 'staff'
   const router = useRouter();
 
   const handleSignup = () => {
     // You can log the selected role here or send it via API
     console.log({ name, email, password, role });
-
+    axios.post("http://localhost:5000/signup",{ name, email, password, role})
     // Signup logic here (e.g. API call)
-
     router.push('/dashboard'); // Redirect after signup
   };
 
@@ -45,16 +46,13 @@ export default function SignupPage() {
           placeholder="Password"
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-
-        <select
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-          className="w-full px-4 py-2 mb-6 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="staff">Staff</option>
-          <option value="admin">Admin</option>
-        </select>
-
+        <input
+          type="password"
+          value={repassword}
+          onChange={(e) => setrePassword(e.target.value)}
+          placeholder="Re-Enter-Password"
+          className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
         <button
           onClick={handleSignup}
           className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-200"
