@@ -11,7 +11,7 @@ export default function MainPage() {
               <LayoutDashboard size={18} />
               <span>Dashboard</span>
             </a>
-            <a href="#booking" className="flex gap-2 items-center text-gray-500 hover:text-black">
+            <a href="/booking" className="flex gap-2 items-center text-gray-500 hover:text-black">
               <Bell size={18} />
               <span>Bookings</span>
             </a>
