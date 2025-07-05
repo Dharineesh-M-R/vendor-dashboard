@@ -2,16 +2,33 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
+
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
 
-  const handleLogin = () => {
-    // Login logic here
-    router.push('/dashboard');
-  };
+  const handleLogin = async () => {
+  try {
+    const res = await axios.post('http://localhost:5000/api/auth/login', {
+      email,
+      password
+    });
+
+    if (res.data.success) {
+      alert('Login successful');
+      router.push('/dashboard');
+    } else {
+      alert(res.data.message || 'Login failed');
+    }
+  } catch (err) {
+    console.error(err);
+    alert('An error occurred during login');
+  }
+};
+
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">

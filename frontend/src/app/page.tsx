@@ -12,7 +12,7 @@ export default function SignupPage() {
   const [role] = useState('staff'); // default to 'staff'
   const router = useRouter();
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
     if(!name || !email || !password || !repassword){
       alert("All informations are required.");
       return;
@@ -29,9 +29,21 @@ export default function SignupPage() {
       alert("Password does not match.");
       return;
     }
-    console.log("Successful signup.",{ name, email, password, role });
-    
-    router.push('/dashboard');
+    try{
+      const res = await axios.post("http://localhost:5000/api/auth/signup",{name, email, password, role});
+      if(res.data.success)
+      {
+        alert("Signup Successful.");
+        router.push('/dashboard');
+      }
+      else{
+        alert(res.data.message || "Sugnup failed.");
+      }
+    }
+    catch (err){
+      console.error(err);
+      alert("An error occured while signup.");
+    }
   }
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
