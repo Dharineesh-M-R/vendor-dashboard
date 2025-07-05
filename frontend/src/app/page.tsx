@@ -13,13 +13,26 @@ export default function SignupPage() {
   const router = useRouter();
 
   const handleSignup = () => {
-    // You can log the selected role here or send it via API
-    console.log({ name, email, password, role });
-    axios.post("http://localhost:5000/signup",{ name, email, password, role})
-    // Signup logic here (e.g. API call)
-    router.push('/dashboard'); // Redirect after signup
-  };
-
+    if(!name || !email || !password || !repassword){
+      alert("All informations are required.");
+      return;
+    }
+    if (password.length < 8) {
+      alert('Password must be at least 8 characters long');
+      return;
+    }
+    if(!email.includes("@")){
+      alert("Invalid email format.");
+      return;
+    }
+    if(password !== repassword){
+      alert("Password does not match.");
+      return;
+    }
+    console.log("Successful signup.",{ name, email, password, role });
+    
+    router.push('/dashboard');
+  }
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
@@ -29,7 +42,7 @@ export default function SignupPage() {
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Full Name"
+          placeholder="User Name"
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         <input
