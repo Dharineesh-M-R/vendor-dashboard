@@ -1,7 +1,32 @@
-import { LayoutDashboard, Bell,Users,Car,FileText,Table } from "lucide-react";
+'use client';
+
+import {
+  LayoutDashboard,
+  Bell,
+  Users,
+  Car,
+  FileText,
+  Table,
+} from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { useRouter } from 'next/navigation';
+
 
 export default function MainPage() {
+  const router = useRouter();
+
+  const logoutFunc = () =>{
+    router.push('/login')
+  }
   return (
     <>
       <div className="grid grid-cols-12 gap-x-2 gap-y-2 h-screen">
@@ -55,8 +80,27 @@ export default function MainPage() {
           </nav>
         </aside>
         <main className="col-span-10 bg-white p-6 space-y-6">
-          <div className="col-span-10 text-black font-semibold text-2xl ">
-            Dashboard Overview
+          <div className="flex justify-between items-center col-span-10">
+            <h2 className="text-2xl font-semibold text-black">
+              Dashboard Overview
+            </h2>
+            <div className="text-sm">
+              <DropdownMenu>
+                <DropdownMenuTrigger className="font-medium">
+                  My Account
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>user name</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>admin/staff</DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Button variant="outline" className="w-full" onClick={logoutFunc}>
+                      Logout
+                    </Button>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
           <hr />
           <div className="flex flex-wrap grid-cols-10 gap-4">
@@ -81,22 +125,16 @@ export default function MainPage() {
               <div>...</div>
             </div>
           </div>
-            <Tabs defaultValue="account" className="w-[400px]">
-              <TabsList>
-                <TabsTrigger value="lvbk">Live Bookings</TabsTrigger>
-                <TabsTrigger value="bh">Booking History</TabsTrigger>
-                <TabsTrigger value="ct">Custom Tables</TabsTrigger>
-              </TabsList>
-              <TabsContent value="lvbk">
-                ...
-              </TabsContent>
-              <TabsContent value="bh">
-                ...
-              </TabsContent>
-              <TabsContent value="ct">
-                ...
-              </TabsContent>
-            </Tabs>
+          <Tabs defaultValue="account" className="w-[400px]">
+            <TabsList>
+              <TabsTrigger value="lvbk">Live Bookings</TabsTrigger>
+              <TabsTrigger value="bh">Booking History</TabsTrigger>
+              <TabsTrigger value="ct">Custom Tables</TabsTrigger>
+            </TabsList>
+            <TabsContent value="lvbk">...</TabsContent>
+            <TabsContent value="bh">...</TabsContent>
+            <TabsContent value="ct">...</TabsContent>
+          </Tabs>
         </main>
       </div>
     </>
