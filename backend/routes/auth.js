@@ -1,8 +1,10 @@
-const express = require('express');
-const router = express.Router();
-const bcrypt = require('bcryptjs');
-const supabase = require('../supabaseClient');
+import express from 'express';
+import bcrypt from 'bcryptjs';
+import supabase from '../supabaseClient.js'; // Add `.js` extension
 
+const router = express.Router();
+
+// Signup Route
 router.post('/signup', async (req, res) => {
   const { name, email, password, role } = req.body;
 
@@ -35,6 +37,7 @@ router.post('/signup', async (req, res) => {
   }
 });
 
+// Login Route
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -57,12 +60,19 @@ router.post('/login', async (req, res) => {
     }
 
     // 3. Login success
-    res.status(200).json({ success: true, message: 'Login successful', user: { id: data.id, name: data.name, role: data.role } });
+    res.status(200).json({
+      success: true,
+      message: 'Login successful',
+      user: {
+        id: data.id,
+        name: data.name,
+        role: data.role,
+      },
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: 'Server error' });
   }
 });
 
-
-module.exports = router;
+export default router;

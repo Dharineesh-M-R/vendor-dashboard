@@ -1,32 +1,17 @@
-'use client';
+"use client";
 
-import {
-  LayoutDashboard,
-  Bell,
-  Users,
-  Car,
-  FileText,
-  Table,
-} from "lucide-react";
+import {LayoutDashboard,Bell,Users,Car,FileText,Table,} from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import {DropdownMenu,DropdownMenuContent,DropdownMenuItem,DropdownMenuLabel,DropdownMenuSeparator,DropdownMenuTrigger,} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { useRouter } from 'next/navigation';
-
+import { useRouter } from "next/navigation";
 
 export default function MainPage() {
   const router = useRouter();
 
-  const logoutFunc = () =>{
-    router.push('/login')
-  }
+  const logoutFunc = () => {
+    router.push("/login");
+  };
   return (
     <>
       <div className="grid grid-cols-12 gap-x-2 gap-y-2 h-screen">
@@ -85,21 +70,20 @@ export default function MainPage() {
               Dashboard Overview
             </h2>
             <div className="text-sm">
-              <DropdownMenu>
-                <DropdownMenuTrigger className="font-medium">
-                  My Account
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>user name</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>admin/staff</DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Button variant="outline" className="w-full" onClick={logoutFunc}>
-                      Logout
-                    </Button>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+                <DropdownMenu>
+                  <DropdownMenuTrigger className="font-medium">
+                    My Account
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>username</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>email</DropdownMenuItem>
+                    <DropdownMenuItem>role</DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Button variant="outline" className="w-full" onClick={logoutFunc}>Logout</Button>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
             </div>
           </div>
           <hr />
