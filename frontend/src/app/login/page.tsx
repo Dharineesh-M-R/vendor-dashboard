@@ -1,34 +1,33 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import axios from 'axios';
-
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const router = useRouter();
 
   const handleLogin = async () => {
-  try {
-    const res = await axios.post('http://localhost:5000/api/auth/login', {
-      email,
-      password
-    });
+    try {
+      const res = await axios.post("http://localhost:5000/api/auth/login", {
+        email,
+        password,
+      });
 
-    if (res.data.success) {
-      alert('Login successful');
-      router.push('/dashboard');
-    } else {
-      alert(res.data.message || 'Login failed');
+      if (res.data.success) {
+        alert("Login successful");
+        router.push("/dashboard");
+      } else {
+        alert(res.data.message || "Login failed");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("An error occurred during login");
     }
-  } catch (err) {
-    console.error(err);
-    alert('An error occurred during login');
-  }
-};
-
+    localStorage.setItem('loggedInEmail', email);
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
@@ -55,7 +54,7 @@ export default function LoginPage() {
           Login
         </button>
         <p className="text-center mt-4 text-sm text-gray-600">
-          Don't have an account?{' '}
+          Don't have an account?{" "}
           <a href="/" className="text-blue-600 hover:underline">
             Sign up
           </a>

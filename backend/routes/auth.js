@@ -4,6 +4,25 @@ import supabase from '../supabaseClient.js'; // Add `.js` extension
 
 const router = express.Router();
 
+// GET /api/auth/user/:email
+router.get('/user/:email', async (req, res) => {
+  const { email } = req.params;
+
+  const { data, error } = await supabase
+    .from('users')
+    .select('name, role')
+    .eq('email', email)
+    .single();
+
+  if (error || !data) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  res.json(data);
+});
+
+
+
 // Signup Route
 router.post('/signup', async (req, res) => {
   const { name, email, password, role } = req.body;
