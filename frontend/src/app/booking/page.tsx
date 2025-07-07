@@ -26,6 +26,17 @@ const initialBookings = [
     company: 'XYZ Corp',
     status: 'Ongoing',
   },
+  {
+    id: 'BK003',
+    date: '2025-07-03',
+    driver: 'Suresh Babu',
+    vehicleType: 'Hatchback',
+    vehicleNumber: 'TS 10 EF 9012',
+    location: 'Guntur',
+    contact: '9988776655',
+    company: 'LMN Pvt Ltd',
+    status: 'Not Yet Accepted',
+  },
 ];
 
 export default function AllBookings() {
@@ -69,6 +80,12 @@ export default function AllBookings() {
       status: 'Ongoing',
     });
     setShowForm(false);
+  };
+
+  const handleUpdateStatus = (id: string, newStatus: string) => {
+    setBookings((prev) =>
+      prev.map((b) => (b.id === id ? { ...b, status: newStatus } : b))
+    );
   };
 
   return (
@@ -158,7 +175,7 @@ export default function AllBookings() {
               <th className="px-4 py-3">Location</th>
               <th className="px-4 py-3">Contact</th>
               <th className="px-4 py-3">Company</th>
-              <th className="px-4 py-3">Status</th>
+              <th className="px-4 py-3">Status / Action</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
@@ -173,17 +190,46 @@ export default function AllBookings() {
                 <td className="px-4 py-3">{b.contact}</td>
                 <td className="px-4 py-3">{b.company}</td>
                 <td className="px-4 py-3">
-                  <span
-                    className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      b.status === 'Completed'
-                        ? 'bg-green-100 text-green-700'
-                        : b.status === 'Ongoing'
-                        ? 'bg-blue-100 text-blue-700'
-                        : 'bg-red-100 text-red-700'
-                    }`}
-                  >
-                    {b.status}
-                  </span>
+                  {b.status === 'Not Yet Accepted' ? (
+                    <div className="flex flex-col gap-1">
+                      <button
+                        onClick={() => handleUpdateStatus(b.id, 'Accepted')}
+                        className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 rounded"
+                      >
+                        Accept
+                      </button>
+                      <button
+                        onClick={() => handleUpdateStatus(b.id, 'Rejected')}
+                        className="bg-red-600 hover:bg-red-700 text-white text-xs px-2 py-1 rounded"
+                      >
+                        Reject
+                      </button>
+                      <button
+                        onClick={() => handleUpdateStatus(b.id, 'Pushed to Open Market')}
+                        className="bg-yellow-500 hover:bg-yellow-600 text-white text-xs px-2 py-1 rounded"
+                      >
+                        Push to Open Market
+                      </button>
+                    </div>
+                  ) : (
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        b.status === 'Completed'
+                          ? 'bg-green-100 text-green-700'
+                          : b.status === 'Ongoing'
+                          ? 'bg-blue-100 text-blue-700'
+                          : b.status === 'Accepted'
+                          ? 'bg-purple-100 text-purple-700'
+                          : b.status === 'Rejected'
+                          ? 'bg-red-100 text-red-700'
+                          : b.status === 'Pushed to Open Market'
+                          ? 'bg-yellow-100 text-yellow-700'
+                          : 'bg-gray-100 text-gray-700'
+                      }`}
+                    >
+                      {b.status}
+                    </span>
+                  )}
                 </td>
               </tr>
             ))}

@@ -88,21 +88,21 @@ export default function MainPage() {
             <span>Drivers</span>
           </a>
           <a
-            href="#vehicles"
+            href="/vehicles"
             className="flex gap-2 items-center text-gray-500 hover:text-black"
           >
             <Car size={18} />
             <span>Vehicles</span>
           </a>
           <a
-            href="#invoices"
+            href="/invoice"
             className="flex gap-2 items-center text-gray-500 hover:text-black"
           >
             <FileText size={18} />
             <span>Invoices</span>
           </a>
           <a
-            href="#customtables"
+            href="/customtable"
             className="flex gap-2 items-center text-gray-500 hover:text-black"
           >
             <Table size={18} />
