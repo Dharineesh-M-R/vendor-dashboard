@@ -1,28 +1,95 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+
+interface Booking {
+  id: string;
+  date: string;
+  status: string;
+  driver_name: string;
+  vehicle_type: string;
+  vehicle_number: string;
+  location: string;
+  contact_number: string;
+  company_name: string;
+}
 
 export default function AllBookings() {
-  const[id,setId]=useState('');
-  const[date,setDate]=useState('');
-  const[status,setStatus]=useState('');
-  const[driverName,setDrivername]=useState('');
-  const[vehicletype,setVehicletype]=useState('');
-  const[vehiclenumber,setVehiclenumber]=useState('');
-  const[location,setLocation]=useState('');
-  const[contactnumber,setContactnumber]=useState('');
-  const [search, setSearch] = useState('');
-  const[isOpen,setIsopen] = useState(false);
+  const [id, setId] = useState("");
+  const [date, setDate] = useState("");
+  const [status, setStatus] = useState("ongoing");
+  const [driver_name, setDriver_name] = useState("");
+  const [vehicle_type, setVehicle_type] = useState("");
+  const [vehicle_number, setVehicle_number] = useState("");
+  const [location, setLocation] = useState("");
+  const [contact_number, setContact_number] = useState("");
+  const [company_name, setCompany_name] = useState("");
+  const [search, setSearch] = useState("");
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [isOpen, setIsopen] = useState(false);
   const router = useRouter();
 
   const toggleform = () => setIsopen(!isOpen);
-  
-  const dataentry = async () => {
-    const res = await axios.post('',{id,date,status,driverName,vehicletype,vehiclenumber,location,contactnumber});
-  }
 
+  const dataentry = async () => {
+    if (
+      !id ||
+      !date ||
+      !status ||
+      !driver_name ||
+      !vehicle_type ||
+      !vehicle_number ||
+      !location ||
+      !contact_number ||
+      !company_name
+    ) {
+      alert("Please fill in all the fields before submitting.");
+      return;
+    }
+
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/booking/pushdetails",
+        {
+          id,
+          date,
+          status,
+          driver_name,
+          vehicle_type,
+          vehicle_number,
+          location,
+          contact_number,
+          company_name,
+        }
+      );
+
+      alert("Booking added successfully");
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        console.error("Axios error:", err.response?.data || err.message);
+        alert(
+          `Failed to add booking: ${err.response?.data?.error || err.message}`
+        );
+      } else {
+        console.error("Unexpected error:", err);
+        alert("An unexpected error occurred.");
+      }
+    }
+  };
+  useEffect(() => {
+    const fetchBookings = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/bookings");
+        setBookings(res.data);
+      } catch (error) {
+        console.error("Error fetching bookings:", error);
+      }
+    };
+
+    fetchBookings();
+  }, []);
 
   return (
     <div className="p-6">
@@ -33,10 +100,10 @@ export default function AllBookings() {
             onClick={toggleform}
             className="bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-4 py-2 rounded-md"
           >
-            {isOpen ? 'Hide Form' : 'Show Form'}
+            {isOpen ? "Hide Form" : "Show Form"}
           </button>
           <button
-            onClick={() => router.push('/dashboard')}
+            onClick={() => router.push("/dashboard")}
             className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-md"
           >
             Go Back
@@ -58,63 +125,62 @@ export default function AllBookings() {
         <div className="mb-6 border p-4 rounded-lg bg-gray-50 shadow">
           <h2 className="text-lg font-semibold mb-3">Manual Booking Form</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input 
-            type="text" 
-            value={id} 
-            onChange={(e) => setId(e.target.value)} 
-            placeholder='Booking ID'
-            className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            <input
+              type="text"
+              value={id}
+              onChange={(e) => setId(e.target.value)}
+              placeholder="Booking ID"
+              className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <input 
-            type="date" 
-            value={date} 
-            onChange={(e) => setDate(e.target.value)} 
-            placeholder='Date'
-            className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              placeholder="Date"
+              className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <input 
-            type="text" 
-            value={status} 
-            onChange={(e) => setStatus(e.target.value)} 
-            placeholder='Status'
-            className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            <input
+              type="text"
+              value={driver_name}
+              onChange={(e) => setDriver_name(e.target.value)}
+              placeholder="Driver Name"
+              className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <input 
-            type="text" 
-            value={driverName} 
-            onChange={(e) => setDrivername(e.target.value)} 
-            placeholder='Driver Name'
-            className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            <input
+              type="text"
+              value={vehicle_type}
+              onChange={(e) => setVehicle_type(e.target.value)}
+              placeholder="Vehicle Type"
+              className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <input 
-            type="text" 
-            value={vehicletype} 
-            onChange={(e) => setVehicletype(e.target.value)} 
-            placeholder='Vehicle Type'
-            className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            <input
+              type="text"
+              value={vehicle_number}
+              onChange={(e) => setVehicle_number(e.target.value)}
+              placeholder="Vehicle Number"
+              className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <input 
-            type="text" 
-            value={vehiclenumber} 
-            onChange={(e) => setVehiclenumber(e.target.value)} 
-            placeholder='Booking ID'
-            className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            <input
+              type="text"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              placeholder="Location"
+              className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <input 
-            type="text" 
-            value={location} 
-            onChange={(e) => setLocation(e.target.value)} 
-            placeholder='Booking ID'
-            className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            <input
+              type="text"
+              value={contact_number}
+              onChange={(e) => setContact_number(e.target.value)}
+              placeholder="Contact Number"
+              className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <input 
-            type="text" 
-            value={contactnumber} 
-            onChange={(e) => setContactnumber(e.target.value)} 
-            placeholder='Booking ID'
-            className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            <input
+              type="text"
+              value={company_name}
+              onChange={(e) => setCompany_name(e.target.value)}
+              placeholder="Contact Number"
+              className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            
           </div>
           <div className="mt-4 flex gap-2">
             <button
@@ -141,10 +207,25 @@ export default function AllBookings() {
               <th className="px-4 py-3">Company</th>
               <th className="px-4 py-3">Timer</th>
               <th className="px-4 py-3">Status / Action</th>
+              <th className="px-4 py-3">delete</th>
             </tr>
           </thead>
           <tbody>
-            <tr></tr>
+            {bookings.map((booking) => (
+              <tr key={booking.id}>
+                <td className="px-4 py-3">{booking.id}</td>
+                <td className="px-4 py-3">{booking.date}</td>
+                <td className="px-4 py-3">{booking.driver_name}</td>
+                <td className="px-4 py-3">{booking.vehicle_type}</td>
+                <td className="px-4 py-3">{booking.vehicle_number}</td>
+                <td className="px-4 py-3">{booking.location}</td>
+                <td className="px-4 py-3">{booking.contact_number}</td>
+                <td className="px-4 py-3">{booking.company_name}</td>
+                <td className="px-4 py-3">timer</td>
+                <td className="px-4 py-3">{booking.status}</td>
+                <td className="px-4 py-3">Delete btn</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
