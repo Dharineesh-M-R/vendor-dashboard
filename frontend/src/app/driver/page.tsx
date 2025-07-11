@@ -5,99 +5,50 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 
 type Driver = {
-  employeeId: string;
-  name: string;
-  joiningDate: string;
-  vehicleType: string;
-  vehicleNumber: string;
-  panNumber: string;
-  aadhar: string;
-  licenseNumber: string;
-  phone: string;
+  empid: string;
+  driver_name: string;
+  date_of_joining: string;
+  vehicle_type: string;
+  vehicle_number: string;
+  pan_number: string;
+  aadhar_number: string;
+  liscence_number: string;
+  phone_number: string;
   email: string;
   address: string;
   salary: string;
   department: string;
-  accountNumber: string;
-  ifsc: string;
+  account_number: string;
+  ifsc_code: string;
 };
 
 export default function DriverManagementPage() {
-  const [drivers, setDrivers] = useState<Driver[]>([]);
-  const [showForm, setShowForm] = useState<boolean>(false);
-  const [formData, setFormData] = useState<Driver>({
-    employeeId: "",
-    name: "",
-    joiningDate: "",
-    vehicleType: "",
-    vehicleNumber: "",
-    panNumber: "",
-    aadhar: "",
-    licenseNumber: "",
-    phone: "",
-    email: "",
-    address: "",
-    salary: "",
-    department: "",
-    accountNumber: "",
-    ifsc: "",
-  });
-
+  const[empid,setEmpid]=useState('');
+  const[driver_name,setDriver_name]=useState('');
+  const[date_of_joining,setDate_of_joining]=useState('');
+  const[vehicle_type,setvehicle_type]=useState('');
+  const[vehicle_number,setvehicle_number]=useState('');
+  const[pan_number,setpan_number]=useState('');
+  const[aadhar_number,setaadhar_number]=useState('');
+  const[liscence_number,setliscence_number]=useState('');
+  const[phone_number,setphone_number]=useState('');
+  const[email,setemail]=useState('');
+  const[address,setaddress]=useState('');
+  const[salary,setsalary]=useState('');
+  const[department,setdepartment]=useState('');
+  const[account_number,setaccount_number]=useState('');
+  const[ifsc_code,setifsc_code]=useState('');
+  const [showForm, setShowForm] = useState(false);
   const router = useRouter();
 
-  const fetchDrivers = async () => {
-    try {
-      const res = await axios.get("/api/drivers");
-      setDrivers(res.data);
-    } catch (err) {
-      console.error("Error fetching drivers:", err);
-    }
+  const toggleForm = () => {
+    setShowForm(!showForm);
   };
 
-  useEffect(() => {
-    fetchDrivers();
-  }, []);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await axios.post("/api/drivers", formData);
-      fetchDrivers();
-      setShowForm(false); // Collapse after submission
-      setFormData({
-        employeeId: "",
-        name: "",
-        joiningDate: "",
-        vehicleType: "",
-        vehicleNumber: "",
-        panNumber: "",
-        aadhar: "",
-        licenseNumber: "",
-        phone: "",
-        email: "",
-        address: "",
-        salary: "",
-        department: "",
-        accountNumber: "",
-        ifsc: "",
-      });
-    } catch (err) {
-      console.error("Error adding driver:", err);
-    }
-  };
-
-  const handleDelete = async (employeeId: string) => {
-    try {
-      await axios.delete(`/api/drivers/${employeeId}`);
-      fetchDrivers();
-    } catch (err) {
-      console.error("Error deleting driver:", err);
-    }
-  };
+  const pushdata = async() => {
+    const res = await axios.post('http://localhost:5000/api/drivers/driverdata',{empid, driver_name, date_of_joining, vehicle_type, vehicle_number, pan_number, aadhar_number, liscence_number, phone_number, email, address, salary, department,account_number, ifsc_code})
+    alert("Form submitted!");
+  } 
 
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-10">
@@ -106,7 +57,7 @@ export default function DriverManagementPage() {
       {/* Toggle Button */}
       <div className="flex gap-2 text-right">
         <button
-          onClick={() => setShowForm((prev) => !prev)}
+          onClick={toggleForm}
           className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-md shadow"
         >
           {showForm ? "Hide Driver Form" : "Add New Driver"}
@@ -119,47 +70,101 @@ export default function DriverManagementPage() {
         </button>
       </div>
 
-      {/* Form Section */}
       {showForm && (
         <form
-          onSubmit={handleSubmit}
+          onSubmit={pushdata}
           className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-6 shadow-lg rounded-lg transition-all duration-300"
         >
-          {[
-            ["employeeId", "Employee ID"],
-            ["name", "Driver Name"],
-            ["joiningDate", "Date of Joining", "date"],
-            ["vehicleType", "Vehicle Type"],
-            ["vehicleNumber", "Vehicle Number"],
-            ["panNumber", "PAN Number"],
-            ["aadhar", "Aadhar Number"],
-            ["licenseNumber", "License Number"],
-            ["phone", "Phone"],
-            ["email", "Email"],
-            ["address", "Address"],
-            ["salary", "Salary"],
-            ["department", "Department"],
-            ["accountNumber", "Account Number"],
-            ["ifsc", "IFSC Code"],
-          ].map(([name, label, type = "text"]) => (
-            <div key={name} className="flex flex-col">
-              <label
-                htmlFor={name}
-                className="text-sm font-medium text-gray-700 mb-1"
-              >
-                {label}
-              </label>
-              <input
-                type={type}
-                name={name}
-                id={name}
-                value={(formData as any)[name]}
-                onChange={handleChange}
-                required
-                className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-          ))}
+          <input 
+          type="text"
+          placeholder="Employee ID" 
+          value={empid}
+          onChange={(e) => setEmpid(e.target.value)}
+          className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          <input 
+          type="text"
+          placeholder="Driver Name" 
+          value={driver_name}
+          onChange={(e) => setDriver_name(e.target.value)}
+          className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          <input 
+          type="date"
+          placeholder="Date of Joining" 
+          value={date_of_joining}
+          onChange={(e) => setDate_of_joining(e.target.value)}
+          className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          <input 
+          type="text"
+          placeholder="Vehicle Type" 
+          value={vehicle_type}
+          onChange={(e) => setvehicle_type(e.target.value)}
+          className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          <input 
+          type="text"
+          placeholder="Vehicle Number" 
+          value={vehicle_number}
+          onChange={(e) => setvehicle_number(e.target.value)}
+          className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          <input 
+          type="text"
+          placeholder="Pan Number" 
+          value={pan_number}
+          onChange={(e) => setpan_number(e.target.value)}
+          className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          <input 
+          type="text"
+          placeholder="Aadhar Number" 
+          value={aadhar_number}
+          onChange={(e) => setaadhar_number(e.target.value)}
+          className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          <input 
+          type="text"
+          placeholder="Liscence Number" 
+          value={liscence_number}
+          onChange={(e) => setliscence_number(e.target.value)}
+          className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          <input 
+          type="text"
+          placeholder="Phone Number" 
+          value={phone_number}
+          onChange={(e) => setphone_number(e.target.value)}
+          className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          <input 
+          type="text"
+          placeholder="Email" 
+          value={email}
+          onChange={(e) => setemail(e.target.value)}
+          className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          <input 
+          type="text"
+          placeholder="Address" 
+          value={address}
+          onChange={(e) => setaddress(e.target.value)}
+          className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          <input 
+          type="text"
+          placeholder="Salary" 
+          value={salary}
+          onChange={(e) => setsalary(e.target.value)}
+          className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          <input 
+          type="text"
+          placeholder="Department" 
+          value={department}
+          onChange={(e) => setdepartment(e.target.value)}
+          className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          <input 
+          type="text"
+          placeholder="Account Number" 
+          value={account_number}
+          onChange={(e) => setaccount_number(e.target.value)}
+          className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+          <input 
+          type="text"
+          placeholder="IFSC Code" 
+          value={ifsc_code}
+          onChange={(e) => setifsc_code(e.target.value)}
+          className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"/>
           <div className="md:col-span-2 flex justify-end">
             <button
               type="submit"
@@ -189,34 +194,7 @@ export default function DriverManagementPage() {
                 <th className="p-3 border text-center">Action</th>
               </tr>
             </thead>
-            <tbody>
-              {drivers.map((driver) => (
-                <tr key={driver.employeeId} className="hover:bg-gray-50">
-                  <td className="p-3 border">{driver.employeeId}</td>
-                  <td className="p-3 border">{driver.name}</td>
-                  <td className="p-3 border">
-                    {driver.vehicleType} ({driver.vehicleNumber})
-                  </td>
-                  <td className="p-3 border">{driver.phone}</td>
-                  <td className="p-3 border">{driver.email}</td>
-                  <td className="p-3 border">{driver.department}</td>
-                  <td className="p-3 border text-center">
-                    <button
-                      onClick={() => handleDelete(driver.employeeId)}
-                      className="bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded-md text-sm"
-                    >
-                      Remove
-                    </button>
-                  </td>
-                </tr>
-              ))}
-              {drivers.length === 0 && (
-                <tr>
-                  <td colSpan={7} className="text-center py-4 text-gray-500">
-                    No drivers found.
-                  </td>
-                </tr>
-              )}
+            <tbody>              
             </tbody>
           </table>
         </div>
