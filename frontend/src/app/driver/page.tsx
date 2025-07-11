@@ -4,24 +4,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
-type Driver = {
-  empid: string;
-  driver_name: string;
-  date_of_joining: string;
-  vehicle_type: string;
-  vehicle_number: string;
-  pan_number: string;
-  aadhar_number: string;
-  liscence_number: string;
-  phone_number: string;
-  email: string;
-  address: string;
-  salary: string;
-  department: string;
-  account_number: string;
-  ifsc_code: string;
-};
-
 export default function DriverManagementPage() {
   const[empid,setEmpid]=useState('');
   const[driver_name,setDriver_name]=useState('');
@@ -45,10 +27,25 @@ export default function DriverManagementPage() {
     setShowForm(!showForm);
   };
 
-  const pushdata = async() => {
-    const res = await axios.post('http://localhost:5000/api/drivers/driverdata',{empid, driver_name, date_of_joining, vehicle_type, vehicle_number, pan_number, aadhar_number, liscence_number, phone_number, email, address, salary, department,account_number, ifsc_code})
+  const pushdata = async (e: React.FormEvent) => {
+  e.preventDefault(); // <-- This is important!
+  if (!empid || !driver_name || !phone_number) {
+  alert("Please fill all required fields.");
+  return;
+  }
+  try {
+    await axios.post('http://localhost:5000/api/drivers/driverdata', {
+      empid, driver_name, date_of_joining, vehicle_type, vehicle_number,
+      pan_number, aadhar_number, liscence_number, phone_number, email,
+      address, salary, department, account_number, ifsc_code
+    });
     alert("Form submitted!");
-  } 
+  } catch (err) {
+    alert("Failed to submit form");
+    console.error(err);
+  }
+};
+ 
 
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-10">

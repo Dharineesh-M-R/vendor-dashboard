@@ -1,7 +1,7 @@
 import express from "express";
-import supabase from "../supabaseClient";
+import supabase from "../supabaseClient.js"; // also check if .js is needed here depending on setup
 
-const souter = express.Router();
+const router = express.Router();
 
 router.post("/driverdata", async (req, res) => {
   const {
@@ -21,6 +21,7 @@ router.post("/driverdata", async (req, res) => {
     account_number,
     ifsc_code,
   } = req.body;
+
   const { data, error } = await supabase
     .from("driver")
     .insert([
@@ -42,6 +43,9 @@ router.post("/driverdata", async (req, res) => {
         ifsc_code,
       },
     ]);
+
+  if (error) return res.status(500).json({ error: error.message });
+  res.status(200).json({ message: "Driver inserted successfully", data });
 });
 
 export default router;
