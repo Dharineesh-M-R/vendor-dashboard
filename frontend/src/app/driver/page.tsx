@@ -191,7 +191,7 @@ export default function DriverManagementPage() {
                 <th className="p-3 border text-center">Action</th>
               </tr>
             </thead>
-            <tbody>              
+            <tbody>               
             </tbody>
           </table>
         </div>
