@@ -4,18 +4,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
-interface Booking {
-  id: string;
-  date: string;
-  status: string;
-  driver_name: string;
-  vehicle_type: string;
-  vehicle_number: string;
-  location: string;
-  contact_number: string;
-  company_name: string;
-}
-
 export default function AllBookings() {
   const [id, setId] = useState("");
   const [date, setDate] = useState("");
@@ -27,7 +15,6 @@ export default function AllBookings() {
   const [contact_number, setContact_number] = useState("");
   const [company_name, setCompany_name] = useState("");
   const [search, setSearch] = useState("");
-  const [bookings, setBookings] = useState<Booking[]>([]);
   const [isOpen, setIsopen] = useState(false);
   const router = useRouter();
 
@@ -78,18 +65,6 @@ export default function AllBookings() {
       }
     }
   };
-  useEffect(() => {
-    const fetchBookings = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/api/bookings");
-        setBookings(res.data);
-      } catch (error) {
-        console.error("Error fetching bookings:", error);
-      }
-    };
-
-    fetchBookings();
-  }, []);
 
   return (
     <div className="p-6">
@@ -211,21 +186,6 @@ export default function AllBookings() {
             </tr>
           </thead>
           <tbody>
-            {bookings.map((booking) => (
-              <tr key={booking.id}>
-                <td className="px-4 py-3">{booking.id}</td>
-                <td className="px-4 py-3">{booking.date}</td>
-                <td className="px-4 py-3">{booking.driver_name}</td>
-                <td className="px-4 py-3">{booking.vehicle_type}</td>
-                <td className="px-4 py-3">{booking.vehicle_number}</td>
-                <td className="px-4 py-3">{booking.location}</td>
-                <td className="px-4 py-3">{booking.contact_number}</td>
-                <td className="px-4 py-3">{booking.company_name}</td>
-                <td className="px-4 py-3">timer</td>
-                <td className="px-4 py-3">{booking.status}</td>
-                <td className="px-4 py-3">Delete btn</td>
-              </tr>
-            ))}
           </tbody>
         </table>
       </div>
