@@ -1,8 +1,13 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
+import cors from 'cors';
 import supabase from '../supabaseClient.js'; // Add `.js` extension
 
 const router = express.Router();
+const app = express();
+
+app.use(cors());
+app.use(express.json());
 
 // GET /api/auth/user/:email
 router.get('/user/:email', async (req, res) => {
@@ -91,6 +96,24 @@ router.post('/login', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
+router.get('/activebooking' , async (res,req) =>{
+  try{
+    const {data,error} = await supabase
+    .from('booking')
+    .select('*')
+
+    if (error) {
+      console.error('Supabase Error:', error.message);
+      return res.status(500).json({ error: error.message });
+    }
+
+    res.status(200).json(data);
+  } catch (err) {
+    console.error('Server Error:', err.message);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 

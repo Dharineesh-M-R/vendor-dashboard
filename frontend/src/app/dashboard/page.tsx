@@ -25,11 +25,26 @@ import {
 
 import { Button } from "@/components/ui/button";
 
+type Booking = {
+  id: string;
+  date: string;
+  status: string;
+  driver_name: string;
+  vehicle_type: string;
+  vehicle_number: string;
+  location: string;
+  contact_number: string;
+  company_name: string;
+};
+
 export default function MainPage() {
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
   const [email, setEmail] = useState("");
+  const [booking, setBooking] = useState<Booking[]>([]);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const storedEmail = localStorage.getItem("loggedInEmail");
@@ -65,6 +80,24 @@ export default function MainPage() {
     localStorage.removeItem("loggedInEmail");
     router.push("/login");
   };
+
+  const loadactivebookings = async () => {
+    try {
+      setLoading(true); // Start loading
+      const res = await axios.get(
+        "http://localhost:5000/api/auth/activebooking"
+      );
+      setBooking(res.data); // Set the bookings
+    } catch (err) {
+      console.error("Error fetching bookings:", err);
+      setError("Failed to fetch bookings.");
+    } finally {
+      setLoading(false); // Always stop loading
+    }
+  };
+  useEffect(() => {
+    loadactivebookings();
+  }, []);
 
   return (
     <>
@@ -175,11 +208,60 @@ export default function MainPage() {
 
           <Tabs defaultValue="account" className="w-[400px]">
             <TabsList>
-              <TabsTrigger value="lvbk">Live Bookings</TabsTrigger>
+              <TabsTrigger value="lvbk">Active Bookings</TabsTrigger>
               <TabsTrigger value="bh">Booking History</TabsTrigger>
               <TabsTrigger value="ct">Custom Tables</TabsTrigger>
             </TabsList>
-            <TabsContent value="lvbk">...</TabsContent>
+            <TabsContent value="lvbk">
+              <table className="min-w-full bg-white text-sm">
+                <thead className="bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase">
+                  <tr>
+                    <td className="px-4 py-3">Booking ID</td>
+                    <td className="px-4 py-3">Date</td>
+                    <td className="px-4 py-3">Location</td>
+                    <td className="px-4 py-3">Driver Name</td>
+                    <td className="px-4 py-3">Company Name</td>
+                    <td className="px-4 py-3">Contact Number</td>
+                    <td className="px-4 py-3">Status</td>
+                    <td className="px-4 py-3">Upadte status</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loading ? (
+                    <tr>
+                      <td colSpan={7} className="p-4 text-center text-gray-500">
+                        Content Loading...
+                      </td>
+                    </tr>
+                  ) : booking.length === 0 ? (
+                    <tr>
+                      <td colSpan={7} className="p-4 text-center text-gray-500">
+                        No records found.
+                      </td>
+                    </tr>
+                  ) : (
+                    booking.map((booking, idx) => (
+                      <tr key={booking.id}>
+                        <td className="px-4 py-3">{booking.id}</td>
+                        <td className="px-4 py-3">{booking.date}</td>
+                        <td className="px-4 py-3">{booking.location}</td>
+                        <td className="px-4 py-3">{booking.driver_name}</td>
+                        <td className="px-4 py-3">{booking.company_name}</td>
+                        <td className="px-4 py-3">{booking.contact_number}</td>
+                        <td className="px-4 py-3 bg-blue-100 border border-blue-800 rounded">
+                          {booking.status}
+                        </td>
+                        <td className="px-4 py-3">
+                          <button className="px-3 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600">
+                            Completed
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </TabsContent>
             <TabsContent value="bh">...</TabsContent>
             <TabsContent value="ct">...</TabsContent>
           </Tabs>
