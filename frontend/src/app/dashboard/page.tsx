@@ -206,61 +206,76 @@ export default function MainPage() {
             </div>
           </div>
 
-          <Tabs defaultValue="account" className="w-[400px]">
+          <Tabs defaultValue="account" className="w-full">
             <TabsList>
               <TabsTrigger value="lvbk">Active Bookings</TabsTrigger>
               <TabsTrigger value="bh">Booking History</TabsTrigger>
               <TabsTrigger value="ct">Custom Tables</TabsTrigger>
             </TabsList>
             <TabsContent value="lvbk">
-              <table className="min-w-full bg-white text-sm">
-                <thead className="bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase">
-                  <tr>
-                    <td className="px-4 py-3">Booking ID</td>
-                    <td className="px-4 py-3">Date</td>
-                    <td className="px-4 py-3">Location</td>
-                    <td className="px-4 py-3">Driver Name</td>
-                    <td className="px-4 py-3">Company Name</td>
-                    <td className="px-4 py-3">Contact Number</td>
-                    <td className="px-4 py-3">Status</td>
-                    <td className="px-4 py-3">Upadte status</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  {loading ? (
+              <div className="w-full max-w-full overflow-x-auto rounded-lg border border-gray-200 shadow-md">
+                <table className="w-full text-sm text-left text-gray-700 divide-y divide-gray-200">
+                  <thead className="bg-gray-100 uppercase text-xs font-semibold tracking-wider text-gray-600">
                     <tr>
-                      <td colSpan={7} className="p-4 text-center text-gray-500">
-                        Content Loading...
-                      </td>
+                      <th className="px-6 py-3">Booking ID</th>
+                      <th className="px-6 py-3">Date</th>
+                      <th className="px-6 py-3">Location</th>
+                      <th className="px-6 py-3">Driver Name</th>
+                      <th className="px-6 py-3">Company Name</th>
+                      <th className="px-6 py-3">Contact Number</th>
+                      <th className="px-6 py-3">Status</th>
+                      <th className="px-6 py-3">Update Status</th>
                     </tr>
-                  ) : booking.length === 0 ? (
-                    <tr>
-                      <td colSpan={7} className="p-4 text-center text-gray-500">
-                        No records found.
-                      </td>
-                    </tr>
-                  ) : (
-                    booking.map((booking, idx) => (
-                      <tr key={booking.id}>
-                        <td className="px-4 py-3">{booking.id}</td>
-                        <td className="px-4 py-3">{booking.date}</td>
-                        <td className="px-4 py-3">{booking.location}</td>
-                        <td className="px-4 py-3">{booking.driver_name}</td>
-                        <td className="px-4 py-3">{booking.company_name}</td>
-                        <td className="px-4 py-3">{booking.contact_number}</td>
-                        <td className="px-4 py-3 bg-blue-100 border border-blue-800 rounded">
-                          {booking.status}
-                        </td>
-                        <td className="px-4 py-3">
-                          <button className="px-3 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600">
-                            Completed
-                          </button>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {loading ? (
+                      <tr>
+                        <td
+                          colSpan={8}
+                          className="p-6 text-center text-gray-500"
+                        >
+                          Content Loading...
                         </td>
                       </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
+                    ) : booking.length === 0 ? (
+                      <tr>
+                        <td
+                          colSpan={8}
+                          className="p-6 text-center text-gray-500"
+                        >
+                          No records found.
+                        </td>
+                      </tr>
+                    ) : (
+                      booking.map((booking) => (
+                        <tr
+                          key={booking.id}
+                          className="hover:bg-gray-50 transition"
+                        >
+                          <td className="px-6 py-4">{booking.id}</td>
+                          <td className="px-6 py-4">{booking.date}</td>
+                          <td className="px-6 py-4">{booking.location}</td>
+                          <td className="px-6 py-4">{booking.driver_name}</td>
+                          <td className="px-6 py-4">{booking.company_name}</td>
+                          <td className="px-6 py-4">
+                            {booking.contact_number}
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className="inline-block rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800">
+                              {booking.status}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4">
+                            <button className="rounded bg-green-600 px-4 py-2 text-xs text-white hover:bg-green-700 transition">
+                              Completed
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </TabsContent>
             <TabsContent value="bh">...</TabsContent>
             <TabsContent value="ct">...</TabsContent>

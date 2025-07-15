@@ -99,11 +99,12 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.get('/activebooking' , async (res,req) =>{
+router.get('/activebooking' , async (req, res) =>{
   try{
     const {data,error} = await supabase
     .from('booking')
     .select('*')
+    .eq('status', 'ongoing');
 
     if (error) {
       console.error('Supabase Error:', error.message);
