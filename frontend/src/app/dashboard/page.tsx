@@ -42,6 +42,7 @@ export default function MainPage() {
   const [role, setRole] = useState("");
   const [email, setEmail] = useState("");
   const [booking, setBooking] = useState<Booking[]>([]);
+  const [booking1, setBooking1] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const [error, setError] = useState("");
@@ -98,6 +99,45 @@ export default function MainPage() {
   useEffect(() => {
     loadactivebookings();
   }, []);
+
+  const allbookings = async () => {
+    try {
+      setLoading(true); // Start loading
+      const res = await axios.get(
+        "http://localhost:5000/api/auth/allbooking"
+      );
+      setBooking1(res.data); // Set the bookings
+    } catch (err) {
+      console.error("Error fetching bookings:", err);
+      setError("Failed to fetch bookings.");
+    } finally {
+      setLoading(false); // Always stop loading
+    }
+  };
+  useEffect(() => {
+    allbookings();
+  }, []);
+
+
+  const handlecompleted = async (bookingId: string) => {
+    try {
+      const res = await axios.put(
+        `http://localhost:5000/api/auth/update-status/${bookingId}`
+      );
+
+      if (res.status === 200) {
+        alert("Booking marked as completed!");
+
+        // Refresh the booking list
+        loadactivebookings();
+      } else {
+        alert("Failed to update booking status.");
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+      alert("Something went wrong while updating status.");
+    }
+  };
 
   return (
     <>
@@ -210,7 +250,6 @@ export default function MainPage() {
             <TabsList>
               <TabsTrigger value="lvbk">Active Bookings</TabsTrigger>
               <TabsTrigger value="bh">Booking History</TabsTrigger>
-              <TabsTrigger value="ct">Custom Tables</TabsTrigger>
             </TabsList>
             <TabsContent value="lvbk">
               <div className="w-full max-w-full overflow-x-auto rounded-lg border border-gray-200 shadow-md">
@@ -266,7 +305,10 @@ export default function MainPage() {
                             </span>
                           </td>
                           <td className="px-6 py-4">
-                            <button className="rounded bg-green-600 px-4 py-2 text-xs text-white hover:bg-green-700 transition">
+                            <button
+                              onClick={() => handlecompleted(booking.id)}
+                              className="rounded bg-green-600 px-4 py-2 text-xs text-white hover:bg-green-700 transition"
+                            >
                               Completed
                             </button>
                           </td>
@@ -277,8 +319,73 @@ export default function MainPage() {
                 </table>
               </div>
             </TabsContent>
-            <TabsContent value="bh">...</TabsContent>
-            <TabsContent value="ct">...</TabsContent>
+            <TabsContent value="bh">
+              <div className="w-full max-w-full overflow-x-auto rounded-lg border border-gray-200 shadow-md">
+                <table className="w-full text-sm text-left text-gray-700 divide-y divide-gray-200">
+                  <thead className="bg-gray-100 uppercase text-xs font-semibold tracking-wider text-gray-600">
+                    <tr>
+                      <th className="px-6 py-3">Booking ID</th>
+                      <th className="px-6 py-3">Date</th>
+                      <th className="px-6 py-3">Location</th>
+                      <th className="px-6 py-3">Driver Name</th>
+                      <th className="px-6 py-3">Company Name</th>
+                      <th className="px-6 py-3">Contact Number</th>
+                      <th className="px-6 py-3">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {loading ? (
+                      <tr>
+                        <td
+                          colSpan={8}
+                          className="p-6 text-center text-gray-500"
+                        >
+                          Content Loading...
+                        </td>
+                      </tr>
+                    ) : booking1.length === 0 ? (
+                      <tr>
+                        <td
+                          colSpan={8}
+                          className="p-6 text-center text-gray-500"
+                        >
+                          No records found.
+                        </td>
+                      </tr>
+                    ) : (
+                      booking1.map((booking1) => (
+                        <tr
+                          key={booking1.id}
+                          className="hover:bg-gray-50 transition"
+                        >
+                          <td className="px-6 py-4">{booking1.id}</td>
+                          <td className="px-6 py-4">{booking1.date}</td>
+                          <td className="px-6 py-4">{booking1.location}</td>
+                          <td className="px-6 py-4">{booking1.driver_name}</td>
+                          <td className="px-6 py-4">{booking1.company_name}</td>
+                          <td className="px-6 py-4">
+                            {booking1.contact_number}
+                          </td>
+                          <td className="px-6 py-4">
+                            <span
+                              className={`inline-block rounded-full px-3 py-1 text-xs font-medium ${
+                                booking1.status === "completed"
+                                  ? "bg-green-100 text-green-800"
+                                  : booking1.status === "cancelled"
+                                  ? "bg-red-100 text-red-800"
+                                  : "bg-blue-100 text-blue-800"
+                              }`}
+                            >
+                              {booking1.status}
+                            </span>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </TabsContent>
           </Tabs>
         </main>
       </div>

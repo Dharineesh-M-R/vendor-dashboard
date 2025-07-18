@@ -117,4 +117,51 @@ router.get('/activebooking' , async (req, res) =>{
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+router.put('/update-status/:id', async (req, res) => {
+  const bookingId = req.params.id;
+
+  try {
+    // Update the status to 'completed'
+    const { data, error } = await supabase
+      .from('booking') // Replace with your actual table name
+      .update({ status: 'completed' })
+      .eq('id', bookingId)
+      .select(); // Optional: get updated row
+
+    if (error) {
+      console.error('Supabase update error:', error.message);
+      return res.status(500).json({ error: 'Failed to update booking status' });
+    }
+
+    if (data.length === 0) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+
+    res.json({ message: 'Booking marked as completed', data });
+  } catch (err) {
+    console.error('Server error:', err.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+router.get('/allbooking' , async (req, res) =>{
+  try{
+    const {data,error} = await supabase
+    .from('booking')
+    .select('*');
+
+    if (error) {
+      console.error('Supabase Error:', error.message);
+      return res.status(500).json({ error: error.message });
+    }
+
+    res.status(200).json(data);
+  } catch (err) {
+    console.error('Server Error:', err.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
 export default router;
