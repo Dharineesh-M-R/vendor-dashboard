@@ -3,14 +3,16 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import axios from "axios";
 
 type Vehicle = {
-  vehicleType: string;
-  plateNumber: string;
+  vehid: string;
+  vehicle_type: string;
+  plate_number: string;
   model: string;
   availability: string;
-  conditionStatus: string;
-  insurance: string;
+  condition_check_status: string;
+  vehicle_insurance: string;
 };
 
 const VendorVehicleManagement = () => {
@@ -18,20 +20,18 @@ const VendorVehicleManagement = () => {
 
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState<Vehicle>({
-    vehicleType: "",
-    plateNumber: "",
-    model: "",
-    availability: "Available",
-    conditionStatus: "Good",
-    insurance: "",
-  });
+  const [vehid, setvehid] = useState("");
+  const [vehicle_type, setvehicle_type] = useState("");
+  const [plate_number, setplate_number] = useState("");
+  const [model, setmodel] = useState("");
+  const [availability, setavailability] = useState("");
+  const [condition_check_status, setcondition_check_status] = useState("");
+  const [vehicle_insurance, setvehicle_insurance] =  useState("");
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const handlesubmit = async() => {
+    const res = await axios.post("http://localhost:5000/api/vehicles/senddata",{vehid,vehicle_type,plate_number,model,availability,condition_check_status,vehicle_insurance})
+  }
+
 
   return (
     // Changed max-w-5xl mx-auto to w-full (or just remove it if p-6 gives enough padding)
@@ -79,12 +79,12 @@ const VendorVehicleManagement = () => {
                 ) : (
                   vehicles.map((vehicle, index) => (
                     <tr key={index} className="border-t">
-                      <td className="px-4 py-2">{vehicle.vehicleType}</td>
-                      <td className="px-4 py-2">{vehicle.plateNumber}</td>
+                      <td className="px-4 py-2">{vehicle.vehicle_type}</td>
+                      <td className="px-4 py-2">{vehicle.plate_number}</td>
                       <td className="px-4 py-2">{vehicle.model}</td>
                       <td className="px-4 py-2">{vehicle.availability}</td>
-                      <td className="px-4 py-2">{vehicle.conditionStatus}</td>
-                      <td className="px-4 py-2">{vehicle.insurance}</td>
+                      <td className="px-4 py-2">{vehicle.condition_check_status}</td>
+                      <td className="px-4 py-2">{vehicle.vehicle_insurance}</td>
                       <td className="px-4 py-2">
                         <button className="text-red-600 hover:underline">
                           Remove
@@ -102,32 +102,40 @@ const VendorVehicleManagement = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <input
                 type="text"
+                name="vehicleID"
+                value={vehid}
+                onChange={(e)=> setvehid (e.target.value)}
+                placeholder="Vehicle ID"
+                className="border p-2 rounded w-full"
+              />
+              <input
+                type="text"
                 name="vehicleType"
-                value={formData.vehicleType}
-                onChange={handleInputChange}
+                value={vehicle_type}
+                onChange={(e)=> setvehicle_type (e.target.value)}
                 placeholder="Vehicle Type"
                 className="border p-2 rounded w-full"
               />
               <input
                 type="text"
                 name="plateNumber"
-                value={formData.plateNumber}
-                onChange={handleInputChange}
+                value={plate_number}
+                onChange={(e) => setplate_number(e.target.value)}
                 placeholder="Plate Number"
                 className="border p-2 rounded w-full"
               />
               <input
                 type="text"
                 name="model"
-                value={formData.model}
-                onChange={handleInputChange}
+                value={model}
+                onChange={(e) => setmodel(e.target.value)}
                 placeholder="Model"
                 className="border p-2 rounded w-full"
               />
               <select
                 name="availability"
-                value={formData.availability}
-                onChange={handleInputChange}
+                value={availability}
+                onChange={(e) => setavailability(e.target.value)}
                 className="border p-2 rounded w-full"
               >
                 <option value="Available">Available</option>
@@ -135,8 +143,8 @@ const VendorVehicleManagement = () => {
               </select>
               <select
                 name="conditionStatus"
-                value={formData.conditionStatus}
-                onChange={handleInputChange}
+                value={condition_check_status}
+                onChange={(e) => setcondition_check_status(e.target.value)}
                 className="border p-2 rounded w-full"
               >
                 <option value="Good">Good</option>
@@ -145,13 +153,15 @@ const VendorVehicleManagement = () => {
               <input
                 type="text"
                 name="insurance"
-                value={formData.insurance}
-                onChange={handleInputChange}
+                value={vehicle_insurance}
+                onChange={(e) => setvehicle_insurance(e.target.value)}
                 placeholder="Insurance Details"
                 className="border p-2 rounded w-full"
               />
             </div>
-            <button className="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+            <button
+            onClick={handlesubmit} 
+            className="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
               Submit
             </button>
           </div>
@@ -181,12 +191,12 @@ const VendorVehicleManagement = () => {
                 ) : (
                   vehicles.map((vehicle, index) => (
                     <tr key={index} className="border-t">
-                      <td className="px-4 py-2">{vehicle.vehicleType}</td>
-                      <td className="px-4 py-2">{vehicle.plateNumber}</td>
+                      <td className="px-4 py-2">{vehicle.vehicle_type}</td>
+                      <td className="px-4 py-2">{vehicle.plate_number}</td>
                       <td className="px-4 py-2">{vehicle.model}</td>
                       <td className="px-4 py-2">{vehicle.availability}</td>
-                      <td className="px-4 py-2">{vehicle.conditionStatus}</td>
-                      <td className="px-4 py-2">{vehicle.insurance}</td>
+                      <td className="px-4 py-2">{vehicle.condition_check_status}</td>
+                      <td className="px-4 py-2">{vehicle.vehicle_insurance}</td>
                       <td className="px-4 py-2">
                         <button className="text-red-600 hover:underline">
                           Remove
