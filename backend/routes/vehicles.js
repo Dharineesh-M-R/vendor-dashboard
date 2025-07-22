@@ -3,6 +3,7 @@ import supabase from "../supabaseClient.js";
 
 const router = express.Router();
 
+// POST /senddata
 router.post("/senddata", async (req, res) => {
   try {
     const {
@@ -28,18 +29,42 @@ router.post("/senddata", async (req, res) => {
     ]);
 
     if (error) {
-      console.error("🔥 Supabase insert error:", error); // ✅ log Supabase error
+      console.error("🔥 Supabase insert error:", error);
       return res.status(500).json({ error: error.message });
     }
-    return res
-      .status(200)
-      .json({ message: "Vehicle inserted successfully", data });
+    return res.status(200).json({ message: "Vehicle inserted successfully", data });
   } catch (err) {
-    console.error("💥 Unexpected server error:", err); // ✅ log unexpected server error
-    return res
-      .status(500)
-      .json({ error: "Internal server error", detail: err.message });
+    console.error("💥 Unexpected server error:", err);
+    return res.status(500).json({ error: "Internal server error", detail: err.message });
   }
 });
+
+// ✅ ADD THIS: GET /getdata (FIXED: req/res order was wrong)
+router.get("/getdata", async (req, res) => {
+  const { data, error } = await supabase.from("vehicles").select("*");
+
+  if (error) {
+    return res.status(500).json({ error: error.message });
+  }
+
+  return res.status(200).json(data);
+});
+
+// ✅ ADD THIS: DELETE /delete/:vehid
+router.delete("/delete/:vehid", async (req, res) => {
+  const { vehid } = req.params;
+
+  const { error } = await supabase
+    .from("vehicles")
+    .delete()
+    .eq("vehid", vehid);
+
+  if (error) {
+    return res.status(500).json({ error: error.message });
+  }
+
+  return res.status(200).json({ message: "Vehicle deleted successfully." });
+});
+
 
 export default router;
