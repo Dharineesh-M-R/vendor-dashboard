@@ -17,7 +17,7 @@ type Booking = {
 };
 
 export default function AllBookings() {
-  const [id, setId] = useState("");
+  const [id, setId] = useState("BK");
   const [date, setDate] = useState("");
   const [status, setStatus] = useState("ongoing");
   const [driver_name, setDriver_name] = useState("");

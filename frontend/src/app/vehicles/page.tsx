@@ -20,7 +20,7 @@ const VendorVehicleManagement = () => {
   const router = useRouter();
 
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
-  const [vehid, setvehid] = useState("");
+  const [vehid, setvehid] = useState("VEH");
   const [vehicle_type, setvehicle_type] = useState("");
   const [plate_number, setplate_number] = useState("");
   const [model, setmodel] = useState("");

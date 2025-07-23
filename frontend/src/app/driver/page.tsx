@@ -23,7 +23,7 @@ type Driver = {
 };
 
 export default function DriverManagementPage() {
-  const [empid, setEmpid] = useState("");
+  const [empid, setEmpid] = useState("EMP");
   const [driver_name, setDriver_name] = useState("");
   const [date_of_joining, setDate_of_joining] = useState("");
   const [vehicle_type, setvehicle_type] = useState("");
