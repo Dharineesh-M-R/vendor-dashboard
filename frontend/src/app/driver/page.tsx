@@ -48,7 +48,6 @@ export default function DriverManagementPage() {
   };
   const [loading, setLoading] = useState(true);
 
-
   const pushdata = async (e: React.FormEvent) => {
     e.preventDefault(); // <-- This is important!
     if (!empid || !driver_name || !phone_number) {
@@ -115,17 +114,19 @@ export default function DriverManagementPage() {
     <div className="p-8 max-w-7xl mx-auto space-y-10">
       <h1 className="text-3xl font-bold text-gray-800">Driver Management</h1>
 
-      {/* Toggle Button */}
-      <div className="flex gap-2 text-right">
+      <div className="flex justify-between items-center mb-4">
+        {/* Left: Add New Driver Button */}
         <button
           onClick={toggleForm}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-md shadow"
+          className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-md shadow"
         >
-          {showForm ? "Hide Driver Form" : "Add New Driver"}
+          {showForm ? "Hide form" : "Add driver"}
         </button>
+
+        {/* Right: Go Back to Dashboard Button */}
         <button
           onClick={() => router.push("/dashboard")}
-          className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium px-4 py-2 rounded-md shadow mb-4"
+          className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium px-4 py-2 rounded-md shadow"
         >
           ← Go Back to Dashboard
         </button>
