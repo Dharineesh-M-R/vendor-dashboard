@@ -46,6 +46,8 @@ export default function MainPage() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const [error, setError] = useState("");
+  const [ongoingCount, setOngoingCount] = useState<number | null>(null);
+  const [pendingCount, setPendingCount] = useState<number | null>(null);
 
   useEffect(() => {
     const storedEmail = localStorage.getItem("loggedInEmail");
@@ -96,16 +98,11 @@ export default function MainPage() {
       setLoading(false); // Always stop loading
     }
   };
-  useEffect(() => {
-    loadactivebookings();
-  }, []);
 
   const allbookings = async () => {
     try {
       setLoading(true); // Start loading
-      const res = await axios.get(
-        "http://localhost:5000/api/auth/allbooking"
-      );
+      const res = await axios.get("http://localhost:5000/api/auth/allbooking");
       setBooking1(res.data); // Set the bookings
     } catch (err) {
       console.error("Error fetching bookings:", err);
@@ -114,10 +111,34 @@ export default function MainPage() {
       setLoading(false); // Always stop loading
     }
   };
-  useEffect(() => {
-    allbookings();
-  }, []);
 
+  const fetchCount = async () => {
+    try {
+      const res = await axios.get(
+        "http://localhost:5000/api/auth/ongoing-count"
+      );
+      setOngoingCount(res.data.count);
+    } catch (error) {
+      console.error("Error fetching count", error);
+    }
+  };
+  const fetchpending = async () => {
+    try {
+      const res = await axios.get(
+        "http://localhost:5000/api/auth/pending-count"
+      );
+      setPendingCount(res.data.count);
+    } catch (error) {
+      console.error("Error fetching count", error);
+    }
+  };
+
+  useEffect(() => {
+    loadactivebookings();
+    allbookings();
+    fetchCount();
+    fetchpending();
+  }, []);
 
   const handlecompleted = async (bookingId: string) => {
     try {
@@ -227,26 +248,16 @@ export default function MainPage() {
             <div className="w-65 rounded-2xl shadow-lg p-4 bg-white">
               <div>Upcoming Bookings</div>
               <br />
-              <div>...</div>
+              <div>{ongoingCount !== null ? ongoingCount : "Loading..."}</div>
             </div>
             <div className="w-65 rounded-2xl shadow-lg p-4 bg-white">
               <div>Pending Invoices</div>
               <br />
-              <div>...</div>
-            </div>
-            <div className="w-65 rounded-2xl shadow-lg p-4 bg-white">
-              <div>Drivers Active</div>
-              <br />
-              <div>...</div>
-            </div>
-            <div className="w-65 rounded-2xl shadow-lg p-4 bg-white">
-              <div>Vehicles Available</div>
-              <br />
-              <div>...</div>
+              <div>{pendingCount !== null ? pendingCount : "Loading..."}</div>
             </div>
           </div>
 
-          <Tabs defaultValue="account" className="w-full">
+          <Tabs defaultValue="lvbk" className="w-full">
             <TabsList>
               <TabsTrigger value="lvbk">Active Bookings</TabsTrigger>
               <TabsTrigger value="bh">Booking History</TabsTrigger>

@@ -163,5 +163,37 @@ router.get('/allbooking' , async (req, res) =>{
   }
 });
 
+router.get("/ongoing-count", async (req, res) => {
+  try {
+    const { count, error } = await supabase
+      .from("booking")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "ongoing");
+
+    if (error) throw error;
+
+    res.status(200).json({ count });
+  } catch (err) {
+    console.error("Error fetching ongoing bookings count:", err);
+    res.status(500).json({ error: "Failed to fetch booking count" });
+  }
+});
+
+router.get("/pending-count", async (req, res) => {
+  try {
+    const { count, error } = await supabase
+      .from("invoice")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "Pending");
+
+    if (error) throw error;
+
+    res.status(200).json({ count });
+  } catch (err) {
+    console.error("Error fetching ongoing bookings count:", err);
+    res.status(500).json({ error: "Failed to fetch booking count" });
+  }
+});
+
 
 export default router;

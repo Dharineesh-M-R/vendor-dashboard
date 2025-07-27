@@ -68,6 +68,15 @@ export default function AllBookings() {
       );
 
       alert("Booking added successfully");
+      setId("BK");
+      setDate('');
+      setStatus('Ongoing');
+      setDriver_name('');
+      setVehicle_type('');
+      setVehicle_number('');
+      setLocation('');
+      setContact_number('');
+      setCompany_name("");
       fetchBookings();
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
