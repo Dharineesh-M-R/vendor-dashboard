@@ -29,7 +29,7 @@ export default function AdminPage() {
 
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/admin/all-users",
+          "https://vendor-dashboard-t7pq.onrender.com/api/admin/all-users",
           {
             headers: {
               "x-user-email": email,
@@ -57,7 +57,7 @@ export default function AdminPage() {
     try {
       const email = localStorage.getItem("loggedInEmail");
       await axios.put(
-        `http://localhost:5000/api/admin/make-admin`,
+        `https://vendor-dashboard-t7pq.onrender.com/api/admin/make-admin`,
         { userId },
         { headers: { "x-user-email": email } }
       );
@@ -75,7 +75,7 @@ export default function AdminPage() {
     try {
       const email = localStorage.getItem("loggedInEmail");
       await axios.put(
-        `http://localhost:5000/api/admin/make-staff`,
+        `https://vendor-dashboard-t7pq.onrender.com/api/admin/make-staff`,
         { userId },
         { headers: { "x-user-email": email } }
       );

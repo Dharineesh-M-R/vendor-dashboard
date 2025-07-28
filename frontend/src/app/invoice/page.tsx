@@ -36,7 +36,7 @@ const InvoiceBilling = () => {
     try {
       setLoading(true);
       console.log(loading);
-      const res = await axios.get("http://localhost:5000/api/invoices/datafromdb");
+      const res = await axios.get("https://vendor-dashboard-t7pq.onrender.com/api/invoices/datafromdb");
       setAllInvoices(res.data);
     } catch (err) {
       console.error("Error fetching invoices:", err);
@@ -54,7 +54,7 @@ const InvoiceBilling = () => {
     }
 
     try {
-      await axios.post("http://localhost:5000/api/invoices/senddata", {
+      await axios.post("https://vendor-dashboard-t7pq.onrender.com/api/invoices/senddata", {
         invid,
         date,
         amount,
@@ -80,7 +80,7 @@ const InvoiceBilling = () => {
 
   const markAsReceived = async (invid: string) => {
     try {
-      await axios.put(`http://localhost:5000/api/invoices/mark-received/${invid}`);
+      await axios.put(`https://vendor-dashboard-t7pq.onrender.com/api/invoices/mark-received/${invid}`);
       await datafromdb();
     } catch (error) {
       console.error("Failed to mark invoice as received:", error);

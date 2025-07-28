@@ -53,7 +53,7 @@ export default function AllBookings() {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/booking/pushdetails",
+        "https://vendor-dashboard-t7pq.onrender.com/api/booking/pushdetails",
         {
           id,
           date,
@@ -97,7 +97,7 @@ export default function AllBookings() {
   try {
     setLoading(true); // Start loading
     const res = await axios.get(
-      "http://localhost:5000/api/booking/datafromdb"
+      "https://vendor-dashboard-t7pq.onrender.com/api/booking/datafromdb"
     );
     setBookings(res.data); // Set the bookings
   } catch (err) {
@@ -117,7 +117,7 @@ export default function AllBookings() {
   const handleDelete = async (bookingId: string) => {
     try {
       await axios.delete(
-        `http://localhost:5000/api/booking/delete/${bookingId}`
+        `https://vendor-dashboard-t7pq.onrender.com/api/booking/delete/${bookingId}`
       );
       fetchBookings(); // refresh after deletion
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

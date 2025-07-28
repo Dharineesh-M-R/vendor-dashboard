@@ -55,7 +55,7 @@ export default function DriverManagementPage() {
       return;
     }
     try {
-      await axios.post("http://localhost:5000/api/drivers/driverdata", {
+      await axios.post("https://vendor-dashboard-t7pq.onrender.com/api/drivers/driverdata", {
         empid,
         driver_name,
         date_of_joining,
@@ -84,7 +84,7 @@ export default function DriverManagementPage() {
     try {
       setLoading(true); // Start loading
       const res = await axios.get(
-        "http://localhost:5000/api/drivers/driverdata"
+        "https://vendor-dashboard-t7pq.onrender.com/api/drivers/driverdata"
       );
       setdrivers(res.data); // Set the bookings
     } catch (err) {
@@ -99,7 +99,7 @@ export default function DriverManagementPage() {
   const handleFire = async (driverempid: string) => {
     try {
       await axios.delete(
-        `http://localhost:5000/api/drivers/delete/${driverempid}`
+        `https://vendor-dashboard-t7pq.onrender.com/api/drivers/delete/${driverempid}`
       );
       datafromdb(); // refresh after deletion
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

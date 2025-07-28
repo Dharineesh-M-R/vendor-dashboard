@@ -45,7 +45,7 @@ const VendorVehicleManagement = () => {
     }
 
     try {
-      await axios.post("http://localhost:5000/api/vehicles/senddata", {
+      await axios.post("https://vendor-dashboard-t7pq.onrender.com/api/vehicles/senddata", {
         vehid,
         vehicle_type,
         plate_number,
@@ -74,7 +74,7 @@ const VendorVehicleManagement = () => {
 
   const handleDelete = async (vehid: string) => {
     try {
-      await axios.delete(`http://localhost:5000/api/vehicles/delete/${vehid}`);
+      await axios.delete(`https://vendor-dashboard-t7pq.onrender.com/api/vehicles/delete/${vehid}`);
       alert("Vehicle deleted successfully!");
       fetchdata();
     } catch (error) {
@@ -87,7 +87,7 @@ const VendorVehicleManagement = () => {
     try {
       setLoading(true);
       console.log(loading);
-      const res = await axios.get("http://localhost:5000/api/vehicles/getdata");
+      const res = await axios.get("https://vendor-dashboard-t7pq.onrender.com/api/vehicles/getdata");
       setVehicles(res.data);
     } catch (err) {
       console.error("Error fetching vehicles:", err);

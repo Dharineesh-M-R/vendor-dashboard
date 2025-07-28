@@ -62,7 +62,7 @@ export default function MainPage() {
     const fetchUser = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/user/${storedEmail}`
+          `https://vendor-dashboard-t7pq.onrender.com/api/user/${storedEmail}`
         );
 
         setName(res.data.name);
@@ -88,7 +88,7 @@ export default function MainPage() {
   const loadactivebookings = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/api/auth/activebooking");
+      const res = await axios.get("https://vendor-dashboard-t7pq.onrender.com/api/auth/activebooking");
       setBooking(res.data);
     } catch (err) {
       console.error("Error fetching bookings:", err);
@@ -102,7 +102,7 @@ export default function MainPage() {
   const allbookings = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/api/auth/allbooking");
+      const res = await axios.get("https://vendor-dashboard-t7pq.onrender.com/api/auth/allbooking");
       setBooking1(res.data);
     } catch (err) {
       console.error("Error fetching bookings:", err);
@@ -114,7 +114,7 @@ export default function MainPage() {
 
   const fetchCount = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/auth/ongoing-count");
+      const res = await axios.get("https://vendor-dashboard-t7pq.onrender.com/api/auth/ongoing-count");
       setOngoingCount(res.data.count);
     } catch (error) {
       console.error("Error fetching count", error);
@@ -123,7 +123,7 @@ export default function MainPage() {
 
   const fetchpending = useCallback(async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/auth/pending-count");
+      const res = await axios.get("https://vendor-dashboard-t7pq.onrender.com/api/auth/pending-count");
       setPendingCount(res.data.count);
     } catch (error) {
       console.error("Error fetching count", error);
@@ -140,7 +140,7 @@ export default function MainPage() {
   const handlecompleted = async (bookingId: string) => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/auth/update-status/${bookingId}`
+        `https://vendor-dashboard-t7pq.onrender.com/api/auth/update-status/${bookingId}`
       );
 
       if (res.status === 200) {
