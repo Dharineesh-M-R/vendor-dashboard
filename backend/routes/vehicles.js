@@ -32,10 +32,14 @@ router.post("/senddata", async (req, res) => {
       console.error("🔥 Supabase insert error:", error);
       return res.status(500).json({ error: error.message });
     }
-    return res.status(200).json({ message: "Vehicle inserted successfully", data });
+    return res
+      .status(200)
+      .json({ message: "Vehicle inserted successfully", data });
   } catch (err) {
     console.error("💥 Unexpected server error:", err);
-    return res.status(500).json({ error: "Internal server error", detail: err.message });
+    return res
+      .status(500)
+      .json({ error: "Internal server error", detail: err.message });
   }
 });
 
@@ -54,10 +58,7 @@ router.get("/getdata", async (req, res) => {
 router.delete("/delete/:vehid", async (req, res) => {
   const { vehid } = req.params;
 
-  const { error } = await supabase
-    .from("vehicles")
-    .delete()
-    .eq("vehid", vehid);
+  const { error } = await supabase.from("vehicles").delete().eq("vehid", vehid);
 
   if (error) {
     return res.status(500).json({ error: error.message });
@@ -65,6 +66,5 @@ router.delete("/delete/:vehid", async (req, res) => {
 
   return res.status(200).json({ message: "Vehicle deleted successfully." });
 });
-
 
 export default router;
