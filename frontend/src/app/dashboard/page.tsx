@@ -203,6 +203,15 @@ export default function MainPage() {
               <Table size={18} />
               <span>Custom Tables</span>
             </a>
+            {role === "admin" && (
+              <a
+                href="/admin"
+                className="flex gap-2 items-center text-gray-500 hover:text-black"
+              >
+                <Users size={18} />
+                <span>Staff Management</span>
+              </a>
+            )}
           </nav>
         </aside>
 
