@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
@@ -80,7 +80,7 @@ export default function DriverManagementPage() {
     }
   };
 
-  const datafromdb = async () => {
+  const datafromdb = useCallback(async () => {
     try {
       setLoading(true); // Start loading
       const res = await axios.get(
@@ -90,10 +90,11 @@ export default function DriverManagementPage() {
     } catch (err) {
       console.error("Error fetching bookings:", err);
       setError("Failed to fetch bookings.");
+      console.log(error);
     } finally {
       setLoading(false); // Always stop loading
     }
-  };
+  },[error]);
 
   const handleFire = async (driverempid: string) => {
     try {
@@ -101,6 +102,7 @@ export default function DriverManagementPage() {
         `http://localhost:5000/api/drivers/delete/${driverempid}`
       );
       datafromdb(); // refresh after deletion
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error("Delete error:", err.response?.data || err.message);
       alert("Failed to delete booking");
@@ -108,7 +110,7 @@ export default function DriverManagementPage() {
   };
   useEffect(() => {
     datafromdb();
-  }, []);
+  }, [datafromdb]);
 
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-10">

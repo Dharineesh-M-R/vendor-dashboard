@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
@@ -30,7 +30,7 @@ export default function AllBookings() {
   const [isOpen, setIsopen] = useState(false);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [error, setError] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
+  // const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
 
   const toggleform = () => setIsopen(!isOpen);
@@ -78,12 +78,14 @@ export default function AllBookings() {
       setContact_number('');
       setCompany_name("");
       fetchBookings();
+      console.log(res);
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         console.error("Axios error:", err.response?.data || err.message);
         alert(
           `Failed to add booking: ${err.response?.data?.error || err.message}`
         );
+
       } else {
         console.error("Unexpected error:", err);
         alert("An unexpected error occurred.");
@@ -91,24 +93,25 @@ export default function AllBookings() {
     }
   };
 
-  const fetchBookings = async () => {
-    try {
-      setLoading(true); // Start loading
-      const res = await axios.get(
-        "http://localhost:5000/api/booking/datafromdb"
-      );
-      setBookings(res.data); // Set the bookings
-    } catch (err) {
-      console.error("Error fetching bookings:", err);
-      setError("Failed to fetch bookings.");
-    } finally {
-      setLoading(false); // Always stop loading
-    }
-  };
+ const fetchBookings = useCallback(async () => {
+  try {
+    setLoading(true); // Start loading
+    const res = await axios.get(
+      "http://localhost:5000/api/booking/datafromdb"
+    );
+    setBookings(res.data); // Set the bookings
+  } catch (err) {
+    console.error("Error fetching bookings:", err);
+    setError("Failed to fetch bookings.");
+    console.log(error);
+  } finally {
+    setLoading(false); // Always stop loading
+  }
+}, [error]);
 
   useEffect(() => {
     fetchBookings();
-  }, []);
+  }, [fetchBookings]);
   const [loading, setLoading] = useState(true);
 
   const handleDelete = async (bookingId: string) => {
@@ -117,15 +120,16 @@ export default function AllBookings() {
         `http://localhost:5000/api/booking/delete/${bookingId}`
       );
       fetchBookings(); // refresh after deletion
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error("Delete error:", err.response?.data || err.message);
       alert("Failed to delete booking");
     }
   };
 
-  const filteredBookings = bookings.filter((booking) =>
-    booking.company_name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // const filteredBookings = bookings.filter((booking) =>
+  //   booking.company_name.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
 
   return (
     <div className="p-6">
@@ -262,7 +266,7 @@ export default function AllBookings() {
                     .toLowerCase()
                     .includes(search.toLowerCase())
                 )
-                .map((booking, idx) => (
+                .map((booking) => (
                   <tr key={booking.id}>
                     <td className="px-4 py-3">{booking.id}</td>
                     <td className="px-4 py-3">{booking.date}</td>

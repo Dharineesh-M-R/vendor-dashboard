@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node index.js"
+    "dev": "node index.js",
+    "build": "esbuild index.js --bundle --platform=node --outfile=dist/bundle.js",
+    "start": "node dist/bundle.js"
   },
   "keywords": [],
   "author": "",
@@ -20,5 +22,8 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.8"
   }
 }

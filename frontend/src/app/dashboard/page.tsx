@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import {
@@ -68,6 +68,7 @@ export default function MainPage() {
         setName(res.data.name);
         setRole(res.data.role);
       } catch (err) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const error = err as any;
         console.error(
           "Error fetching user info",
@@ -84,61 +85,57 @@ export default function MainPage() {
     router.push("/login");
   };
 
-  const loadactivebookings = async () => {
+  const loadactivebookings = useCallback(async () => {
     try {
-      setLoading(true); // Start loading
-      const res = await axios.get(
-        "http://localhost:5000/api/auth/activebooking"
-      );
-      setBooking(res.data); // Set the bookings
+      setLoading(true);
+      const res = await axios.get("http://localhost:5000/api/auth/activebooking");
+      setBooking(res.data);
     } catch (err) {
       console.error("Error fetching bookings:", err);
       setError("Failed to fetch bookings.");
+      console.log(error);
     } finally {
-      setLoading(false); // Always stop loading
+      setLoading(false);
     }
-  };
+  }, [error]);
 
-  const allbookings = async () => {
+  const allbookings = useCallback(async () => {
     try {
-      setLoading(true); // Start loading
+      setLoading(true);
       const res = await axios.get("http://localhost:5000/api/auth/allbooking");
-      setBooking1(res.data); // Set the bookings
+      setBooking1(res.data);
     } catch (err) {
       console.error("Error fetching bookings:", err);
       setError("Failed to fetch bookings.");
     } finally {
-      setLoading(false); // Always stop loading
+      setLoading(false);
     }
-  };
+  }, []);
 
-  const fetchCount = async () => {
+  const fetchCount = useCallback(async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:5000/api/auth/ongoing-count"
-      );
+      const res = await axios.get("http://localhost:5000/api/auth/ongoing-count");
       setOngoingCount(res.data.count);
     } catch (error) {
       console.error("Error fetching count", error);
     }
-  };
-  const fetchpending = async () => {
+  }, []);
+
+  const fetchpending = useCallback(async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:5000/api/auth/pending-count"
-      );
+      const res = await axios.get("http://localhost:5000/api/auth/pending-count");
       setPendingCount(res.data.count);
     } catch (error) {
       console.error("Error fetching count", error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadactivebookings();
     allbookings();
     fetchCount();
     fetchpending();
-  }, []);
+  }, [loadactivebookings, allbookings, fetchCount, fetchpending]);
 
   const handlecompleted = async (bookingId: string) => {
     try {
@@ -148,8 +145,6 @@ export default function MainPage() {
 
       if (res.status === 200) {
         alert("Booking marked as completed!");
-
-        // Refresh the booking list
         loadactivebookings();
       } else {
         alert("Failed to update booking status.");
@@ -159,6 +154,7 @@ export default function MainPage() {
       alert("Something went wrong while updating status.");
     }
   };
+
 
   return (
     <>

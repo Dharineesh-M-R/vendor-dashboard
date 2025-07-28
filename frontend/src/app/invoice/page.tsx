@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import axios from "axios";
@@ -32,18 +32,20 @@ const InvoiceBilling = () => {
   const receivedInvoices = allInvoices.filter((inv) => inv.status === "Received");
   const pendingInvoices = allInvoices.filter((inv) => inv.status === "Pending");
 
-  const datafromdb = async () => {
+  const datafromdb =useCallback( async () => {
     try {
       setLoading(true);
+      console.log(loading);
       const res = await axios.get("http://localhost:5000/api/invoices/datafromdb");
       setAllInvoices(res.data);
     } catch (err) {
       console.error("Error fetching invoices:", err);
       setError("Failed to fetch invoices.");
+      console.log(error);
     } finally {
       setLoading(false);
     }
-  };
+  },[error,loading]);
 
   const handleadd = async () => {
     if (!invid || !date || amount <= 0 || !status || !company_name) {
@@ -87,7 +89,7 @@ const InvoiceBilling = () => {
 
   useEffect(() => {
     datafromdb();
-  }, []);
+  }, [datafromdb]);
 
   return (
     <div className="p-6 max-w-5xl mx-auto">

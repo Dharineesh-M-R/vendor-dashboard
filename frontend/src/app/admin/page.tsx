@@ -38,6 +38,7 @@ export default function AdminPage() {
         );
 
         setUsers(response.data);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         if (error.response && error.response.status === 403) {
           setUnauthorized(true);

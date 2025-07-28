@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 
 type Vehicle = {
   vehid: string;
@@ -83,22 +83,24 @@ const VendorVehicleManagement = () => {
     }
   };
 
-  const fetchdata = async () => {
+  const fetchdata = useCallback( async () => {
     try {
       setLoading(true);
+      console.log(loading);
       const res = await axios.get("http://localhost:5000/api/vehicles/getdata");
       setVehicles(res.data);
     } catch (err) {
       console.error("Error fetching vehicles:", err);
       setError("Failed to fetch vehicles.");
+      console.log(error);
     } finally {
       setLoading(false);
     }
-  };
+  },[error,loading]);
 
   useEffect(() => {
     fetchdata();
-  }, []);
+  }, [fetchdata]);
 
   return (
     <div className="p-6 w-full">
