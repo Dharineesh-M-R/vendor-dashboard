@@ -55,24 +55,42 @@ export default function DriverManagementPage() {
       return;
     }
     try {
-      await axios.post("https://vendor-dashboard-t7pq.onrender.com/api/drivers/driverdata", {
-        empid,
-        driver_name,
-        date_of_joining,
-        vehicle_type,
-        vehicle_number,
-        pan_number,
-        aadhar_number,
-        liscence_number,
-        phone_number,
-        email,
-        address,
-        salary,
-        department,
-        account_number,
-        ifsc_code,
-      });
+      await axios.post(
+        "https://vendor-dashboard-t7pq.onrender.com/api/drivers/driverdata",
+        {
+          empid,
+          driver_name,
+          date_of_joining,
+          vehicle_type,
+          vehicle_number,
+          pan_number,
+          aadhar_number,
+          liscence_number,
+          phone_number,
+          email,
+          address,
+          salary,
+          department,
+          account_number,
+          ifsc_code,
+        }
+      );
       alert("Form submitted!");
+      setEmpid('EMP');
+      setDriver_name('');
+      setDate_of_joining('');
+      setvehicle_type('');
+      setvehicle_number('');
+      setpan_number('');
+      setaadhar_number('');
+      setliscence_number('');
+      setphone_number('');
+      setemail('');
+      setaddress('');
+      setsalary('');
+      setdepartment('');
+      setaccount_number('');
+      setifsc_code('');
       datafromdb();
     } catch (err) {
       alert("Failed to submit form");
@@ -94,7 +112,7 @@ export default function DriverManagementPage() {
     } finally {
       setLoading(false); // Always stop loading
     }
-  },[error]);
+  }, [error]);
 
   const handleFire = async (driverempid: string) => {
     try {
